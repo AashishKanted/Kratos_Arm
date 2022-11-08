@@ -140,89 +140,31 @@ def loop():
         rate.sleep()
         z *= -1
 
+recieved_value=0
+
+def callback(data):
+    global recieved_value
+    recieved_value=data.data
+    print(f"Recieved value {recieved_value}")
+    pass
+
+
 def sequence():
+    global recieved_value
     rospy.init_node('change_gravity')
     
     gravity = GravityControl()
     gravity_value = 1.0
+    sub1 = rospy.Subscriber('/grav_val',Float64,callback)
     
-    
-    x = 0.0
-    y = -gravity_value
-    z = - gravity_value / 1.0
-    
-    rospy.loginfo("Y - ")
-    gravity.change_gravity(x,y,z)
-    time.sleep(1)
-    
-    
-    x = 0.0
-    y = 0.0
-    z = - gravity_value / 1.0
-    
-    rospy.loginfo("STOP ")
-    gravity.change_gravity(x,y,z)
-    time.sleep(1)
-    
-    x = 0.0
-    y = gravity_value
-    z = - gravity_value / 1.0
-    
-    rospy.loginfo("Y + ")
-    gravity.change_gravity(x,y,z)
-    time.sleep(2)
-    
-    x = 0.0
-    y = 0.0
-    z = - gravity_value / 1.0
-    
-    rospy.loginfo("STOP ")
-    gravity.change_gravity(x,y,z)
-    time.sleep(1)
-    
-    
-    x = gravity_value
-    y = 0.0
-    z = - gravity_value / 1.0
-    
-    rospy.loginfo("X + ")
-    gravity.change_gravity(x,y,z)
-    time.sleep(1)
-    
-    x = 0.0
-    y = 0.0
-    z = - gravity_value / 1.0
-    
-    rospy.loginfo("STOP ")
-    gravity.change_gravity(x,y,z)
-    time.sleep(1)
-    
-    x = -gravity_value
-    y = 0.0
-    z = - gravity_value / 1.0
-    
-    rospy.loginfo("X -")
-    gravity.change_gravity(x,y,z)
-    time.sleep(2)
-    
-    x = 0.0
-    y = 0.0
-    z = - gravity_value / 1.0
-    
-    rospy.loginfo("STOP ")
-    gravity.change_gravity(x,y,z)
-    time.sleep(1)
-    
-    
-    x = 0.0
-    y = 0.0
-    z = + gravity_value / 1.0
-    
-  
-    
-    
-   
-   
+    while not rospy.is_shutdown():
+        x = 0.0
+        z = 0.0
+        y = recieved_value / 1.0
+        
+        rospy.loginfo("STOP ")
+        gravity.change_gravity(x,y,z)
+
 if __name__ == '__main__':
     sequence()
     

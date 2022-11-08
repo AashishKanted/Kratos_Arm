@@ -29,57 +29,39 @@
 More information about PID Controller: http://en.wikipedia.org/wiki/PID_controller
 """
 import time
-
+from tkinter import Y
 
 import rospy
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32,Float64
 
-
-
-
-class PID:
+class PID():
     """PID Controller
     """
 
-    def __init__(self, P, I, D, current_time=None):
-
-        
+    def __init__(self):
+        P=4
+        I=-3
+        D=3
+        current_time=None
         self.Kp = P
         self.Ki = I
         self.Kd = D
-        self.output = 0
-        self.SetPoint = 40
-        self.coord = 0
-        self.last_error = 0
-    
-
-        self.PTerm = 0.0
-        self.ITerm = 0.0
-        self.DTerm = 0.0
-        self.windup_guard = 20.0
-
-        self.pub=rospy.Publisher('/grav_val',Float32,queue_size=10)
-        self.sub=rospy.Subscriber('ball',Float32,self.gety)
-        #self.sub1= rospy.Subscriber('/clock',Time,self.gettime)
 
         self.sample_time = 0.00
         self.current_time = current_time if current_time is not None else time.time()
         self.last_time = self.current_time
-        pid_out = self.output
-        pid_out = max(min( int(pid_out), 15),0)
-        
-        
-        while not rospy.is_shutdown():
-            self.pub.publish(pid_out)
-            print('hello')
-            self.update()
-            continue
-        
+
+        self.y=0
+
         self.clear()
+
+        #changes
+        self.sub=rospy.Subscriber('/ball',Float64,self.gety)
+        self.pub=rospy.Publisher('/grav_val',Float64,queue_size=10)
 
     def clear(self):
         """Clears PID computations and coefficients"""
-        self.SetPoint = 0.0
+        self.SetPoint = 5.0 #changed to 10
 
         self.PTerm = 0.0
         self.ITerm = 0.0
@@ -92,7 +74,7 @@ class PID:
 
         self.output = 0.0
 
-    def update(self, current_time=None):
+    def update(self, feedback_value, current_time=None):
         """Calculates PID value for given reference feedback
         .. math::
             u(t) = K_p e(t) + K_i \int_{0}^{t} e(t)dt + K_d {de}/{dt}
@@ -100,7 +82,7 @@ class PID:
            :align:   center
            Test PID with Kp=1.2, Ki=1, Kd=0.001 (test_pid.py)
         """
-        error = self.SetPoint - self.coord
+        error = self.SetPoint - feedback_value
 
         self.current_time = current_time if current_time is not None else time.time()
         delta_time = self.current_time - self.last_time
@@ -153,32 +135,24 @@ class PID:
         """PID that should be updated at a regular interval.
         Based on a pre-determined sampe time, the PID decides if it should compute or return immediately.
         """
-        
         self.sample_time = sample_time
     
+    #new changes
     def gety(self,data):
-        # print("hello")
-        self.coord = data.data
-
-    #def gettime(self,data):
-       # print("astafarullah")
-        #self.time = data.time
+        self.y = data.data
+        self.update(feedback_value = self.y)
+        pid_out = self.output
+        pid_out = max(min( int(pid_out), 2),-2)
+        self.pub.publish(pid_out)
+        rospy.loginfo(pid_out)
+        print("Main")
+    
+    def main(self):
+        print("Class called")
 
 if __name__ == "__main__":
+    rospy.init_node('pid', anonymous=True)
 
-    ##def gety(data):
-    #    print("hello")
-    #   feedback_value = data.data
-    rospy.init_node('Ball')
-
-    P = 0.2
-    I = 0.2
-    D = 0.2
-    PID(P,I,D)
-    #PID.SetPoint = 40  #target height
-    
-    
-    
-    
-        
-   
+    pid = PID()
+    while not rospy.is_shutdown():
+        pid.main()

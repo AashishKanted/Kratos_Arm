@@ -1,35 +1,28 @@
 #!/usr/bin/env python3  
-from pickle import FALSE
 import rospy
 import tf2_ros
 import gazebo_msgs.msg
 import geometry_msgs.msg
 import time
-from std_msgs.msg import Float32
-from std_msgs.msg import Time
+from std_msgs.msg import Float64
 
-
+import pdb
 
 if __name__ == '__main__':
-    
     rospy.init_node('gazebo_tf_broadcaster')
-
-    use_sim_time:True
 
     broadcaster = tf2_ros.StaticTransformBroadcaster()
 
-    publish_frequency = rospy.get_param("publish_frequency", 1000)
+    publish_frequency = rospy.get_param("publish_frequency", 10)
 
     last_published = None
 
-    pub = rospy.Publisher('ball',Float32,queue_size=10)
-    #pub1 = rospy.Publisher('gshock',Time,queue_size=10)
-
+    pub = rospy.Publisher('/ball',Float64,queue_size=10)
 
     sent_value=0
 
     def ypub():
-        ##self.pub = rospy.Publisher('chatter',Int8,queue_size=10)    
+        ##self.pub = rospy.Publisher('chatter',Int8,queue_size=10)
         pub.publish(sent_value)
 
     def callback(data):
@@ -63,9 +56,6 @@ if __name__ == '__main__':
         last_published = time.time()
         sent_value=data.pose[i].position.y
         ypub()
-
-    #def pubtime():
-        #gazebo_clock = 
     
     rospy.Subscriber("/gazebo/model_states", gazebo_msgs.msg.ModelStates, callback)
 

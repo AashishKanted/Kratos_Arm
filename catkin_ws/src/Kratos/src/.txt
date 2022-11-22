@@ -39,9 +39,9 @@ class PID():
     """
 
     def __init__(self):
-        P=1
-        I=0
-        D=0.025
+        P=4
+        I=0.3
+        D=5
         current_time=None
         self.Kp = P
         self.Ki = I
@@ -52,20 +52,19 @@ class PID():
         self.last_time = self.current_time
 
         self.y=0
-        self.theta=0
 
         self.clear()
 
         #changes
-        self.sub1=rospy.Subscriber('/encoder',Float32,self.gety)
-        self.sub2 = rospy.Subscriber('inv_k',Float32,self.gettheta)
-        self.pub=rospy.Publisher('pid_out',Float32,queue_size=10)
-        
+        self.sub=rospy.Subscriber('/ball',Float64,self.gety)
+        self.pub=rospy.Publisher('/grav_val',Float64,queue_size=10)
+        self.pub1=rospy.Publisher('pid_out',Float64,self.gety)
+        self.sub1=rospy.Subscriber('encoder',Float32)
 
     def clear(self):
         """Clears PID computations and coefficients"""
         
-        self.SetPoint = self.theta #changed to 10
+        self.SetPoint = 5.0 #changed to 10
 
         self.PTerm = 0.0
         self.ITerm = 0.0
@@ -141,19 +140,9 @@ class PID():
         """
         self.sample_time = sample_time
     
-    
-
-    
     #new changes
-    
-    def gettheta(self,data):
-        self.theta=data
-    
-    
-    
     def gety(self,data):
-        self.y = data
-        
+        self.y = data.data
         self.update(feedback_value = self.y)
         pid_out = self.output
         pid_out = max(map([int(pid_out)/360*255]),125)

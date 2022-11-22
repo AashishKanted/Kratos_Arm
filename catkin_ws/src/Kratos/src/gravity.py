@@ -160,7 +160,7 @@ def sequence():
     while not rospy.is_shutdown():
         x = 0.0
         z = 0.0
-        y = recieved_value / 1.0
+        y = (recieved_value ) - (gravity_value/1.0)
         
         rospy.loginfo("STOP ")
         gravity.change_gravity(x,y,z)

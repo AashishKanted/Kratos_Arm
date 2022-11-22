@@ -36,11 +36,11 @@ class ik():
 
     def publisher(self):
         self.pub4 = rospy.Publisher("inv_k",Float64,queue_size = 10)
-        self.pub6 = rospy.Publisher("inv_k",Float64,queue_size = 10)
+        
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
             self.pub.publish(self.theta4)
-            self.pub.publish(self.theta6)
+            # self.pub.publish(self.theta6)
             rate.sleep()
 
 
@@ -65,7 +65,4 @@ print("theta4 = ",theta4)
 
 l6 = math.sqrt((a6**2)+(h**2) - (2*a6*k*math.cos(180 - theta6 - h)))
 l4 = math.sqrt((a4**2)+(i**2) - (2*a4*j*math.cos(180 - theta4)))
-"""sg.ModelStates, callback)
-
-
-    rospy.spin()
+"""

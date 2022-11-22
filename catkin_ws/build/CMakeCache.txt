@@ -496,7 +496,7 @@ gtest_hide_internal_symbols:BOOL=OFF
 gtest_main_LIB_DEPENDS:STATIC=general;gtest;
 
 //Path to a library.
-lib:FILEPATH=/opt/ros/noetic/lib/librostime.so
+lib:FILEPATH=/opt/ros/noetic/lib/libxmlrpcpp.so
 
 //The directory containing a CMake configuration file for message_generation.
 message_generation_DIR:PATH=/opt/ros/noetic/share/message_generation/cmake
@@ -546,8 +546,7 @@ rosserial_chibios_SOURCE_DIR:STATIC=/home/varad/catkin_ws/src/rosserial/rosseria
 //Value Computed by CMake
 rosserial_client_BINARY_DIR:STATIC=/home/varad/catkin_ws/build/rosserial/rosserial_client
 
-//The directory containing a CMake configuration file for rosserial_client.
-rosserial_client_DIR:PATH=/home/varad/catkin_ws/devel/share/rosserial_client/cmake
+rosserial_client_DIR:PATH=
 
 //Value Computed by CMake
 rosserial_client_SOURCE_DIR:STATIC=/home/varad/catkin_ws/src/rosserial/rosserial_client
@@ -576,8 +575,7 @@ rosserial_msgs_SOURCE_DIR:STATIC=/home/varad/catkin_ws/src/rosserial/rosserial_m
 //Value Computed by CMake
 rosserial_python_BINARY_DIR:STATIC=/home/varad/catkin_ws/build/rosserial/rosserial_python
 
-//The directory containing a CMake configuration file for rosserial_python.
-rosserial_python_DIR:PATH=/home/varad/catkin_ws/devel/share/rosserial_python/cmake
+rosserial_python_DIR:PATH=
 
 //Value Computed by CMake
 rosserial_python_SOURCE_DIR:STATIC=/home/varad/catkin_ws/src/rosserial/rosserial_python
@@ -585,8 +583,7 @@ rosserial_python_SOURCE_DIR:STATIC=/home/varad/catkin_ws/src/rosserial/rosserial
 //Value Computed by CMake
 rosserial_server_BINARY_DIR:STATIC=/home/varad/catkin_ws/build/rosserial/rosserial_server
 
-//The directory containing a CMake configuration file for rosserial_server.
-rosserial_server_DIR:PATH=/home/varad/catkin_ws/devel/share/rosserial_server/cmake
+rosserial_server_DIR:PATH=
 
 //Value Computed by CMake
 rosserial_server_SOURCE_DIR:STATIC=/home/varad/catkin_ws/src/rosserial/rosserial_server
@@ -798,7 +795,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=20
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=17
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

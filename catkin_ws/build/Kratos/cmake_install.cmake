@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/varad/catkin_ws/build/Kratos/catkin_generated/installspace/Joystick.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/varad/catkin_ws/build/Kratos/catkin_generated/installspace/joystick.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Joystick/cmake" TYPE FILE FILES
-    "/home/varad/catkin_ws/build/Kratos/catkin_generated/installspace/JoystickConfig.cmake"
-    "/home/varad/catkin_ws/build/Kratos/catkin_generated/installspace/JoystickConfig-version.cmake"
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/joystick/cmake" TYPE FILE FILES
+    "/home/varad/catkin_ws/build/Kratos/catkin_generated/installspace/joystickConfig.cmake"
+    "/home/varad/catkin_ws/build/Kratos/catkin_generated/installspace/joystickConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Joystick" TYPE FILE FILES "/home/varad/catkin_ws/src/Kratos/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/joystick" TYPE FILE FILES "/home/varad/catkin_ws/src/Kratos/package.xml")
 endif()
 

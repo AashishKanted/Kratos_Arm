@@ -1,44 +1,16 @@
 #!/usr/bin/python3
-#
-# This file is part of IvPID.
-# Copyright (C) 2015 Ivmech Mechatronics Ltd. <bilgi@ivmech.com>
-#
-# IvPID is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# IvPID is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-# title           :PID.py
-# description     :python pid controller
-# author          :Caner Durmusoglu
-# date            :20151218
-# version         :0.1
-# notes           :
-# python_version  :2.7
-# ==============================================================================
-
-"""Ivmech PID Controller is simple implementation of a Proportional-Integral-Derivative (PID) Controller in the Python Programming Language.
-More information about PID Controller: http://en.wikipedia.org/wiki/PID_controller
-"""
+ 
 import time
 from tkinter import Y
 
 import rospy
-from std_msgs.msg import Float32,Float64
+from std_msgs.msg import Float32
 
 class PID():
     """PID Controller
     """
 
-    def __init__(self):
+    def _init_(self):
         P=1
         I=0
         D=0.025
@@ -50,9 +22,13 @@ class PID():
         self.sample_time = 0.00
         self.current_time = current_time if current_time is not None else time.time()
         self.last_time = self.current_time
+        self.output=0
+        self.pid_out=0
+        self.theta =0
+
 
         self.y=0
-        self.theta=0
+        
 
         self.clear()
 
@@ -65,17 +41,17 @@ class PID():
     def clear(self):
         """Clears PID computations and coefficients"""
         
-        self.SetPoint = self.theta #changed to 10
+        #self.SetPoint = self.theta #changed to 10
 
         self.PTerm = 0.0
         self.ITerm = 0.0
         self.DTerm = 0.0
+        self.SetPoint =0
         self.last_error = 0.0
 
         # Windup Guard
         self.int_error = 0.0
         self.windup_guard = 20.0
-
         self.output = 0.0
 
     def update(self, feedback_value, current_time=None):
@@ -147,24 +123,35 @@ class PID():
     #new changes
     
     def gettheta(self,data):
-        self.theta=data
+        self.theta=data.data
+        self.SetPoint = self.theta
+
     
     
     
     def gety(self,data):
-        self.y = data
-        
+        self.y = data.data
+        #print(self.y)
         self.update(feedback_value = self.y)
         pid_out = self.output
-        pid_out = max(map([int(pid_out)/360*255]),125)
-        self.pub.publish(pid_out)
+        pid_outsimpl =pid_out/360*255
+        print(pid_outsimpl)
+        if self.y > self.SetPoint :
+            self.pid_out = max(min(pid_outsimpl,-125),-255)
+        elif self.y < self.SetPoint :
+           self.pid_out = min(max(pid_outsimpl,125),255) 
+        else:
+            self.pid_out = self.y       
+        self.pub.publish(self.pid_out)
         rospy.loginfo(pid_out)
-        print("Main")
+        #print("Main")
     
     def main(self):
-        print("Class called")
+        #print(self.pid_out)
+        self.pub.publish(self.pid_out)
+        #print(self.pid_out)
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     rospy.init_node('pid', anonymous=True)
 
     pid = PID()

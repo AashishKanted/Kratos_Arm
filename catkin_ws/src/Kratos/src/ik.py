@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-from std_msgs import Float64
+from std_msgs.msg import Float32
 from sensor_msgs.msg import Joy
 import math
 
@@ -10,9 +10,16 @@ class ik():
     def __init__(self):
         self.x = 0
         self.y = 0
+        self.theta4=0
+        self.theta6 = 0
         rospy.init_node('ik', anonymous=True)
+        
+        self.pub4 = rospy.Publisher("inv_k",Float32,queue_size = 10)
+        
 
     def callback(self,data):
+        self.x = 4
+        self.y = 2
         self.x -= data.axes[0]
         self.y += data.axes[1]
         rospy.loginfo(self.x)
@@ -22,8 +29,9 @@ class ik():
         self.h = 60 #fixed angle wrt a6
         self.k = 0.3 #fixed length wrt a6
         self.j = 0.1 #fixed length wrt a4
-        self.theta4 = (-1* math.acos(((self.x**2) + (self.y**2) - (self.a6**2) - (self.a4**2))/(2*self.a6*self.a4)))*180/math.pi
+        #self.theta4 = -1*(math.acos(((self.x**2) + (self.y**2) - (self.a6**2) - (self.a4**2))/(2*self.a6*self.a4)))*(180/math.pi)
         print(self.theta4*180/math.pi)
+        self.pub4.publish(self.theta6)
         self.theta6 = (math.atan(self.y/self.x) + math.atan((self.a4*math.sin(self.theta4))/(self.a6+(self.a4*math.cos(self.theta4)))))*180/math.pi
 
         print("theta6 = ",self.theta6)
@@ -35,11 +43,11 @@ class ik():
         rospy.Subscriber("/joy", Joy, self.callback)
 
     def publisher(self):
-        self.pub4 = rospy.Publisher("inv_k",Float64,queue_size = 10)
+        #self.pub4 = rospy.Publisher("inv_k",Float64,queue_size = 10)
         
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
-            self.pub.publish(self.theta4)
+            self.pub4.publish(self.theta6)
             # self.pub.publish(self.theta6)
             rate.sleep()
 

@@ -23,7 +23,7 @@ class ik():
         self.pulse= 0
         self.sub1 =rospy.Subscriber("/joy", Joy, self.callback)
         self.pub4 = rospy.Publisher("inv_k",Int32,queue_size = 10)
-        #self.pubpulse = rospy.Publisher("encoder",Float32,queue_size=10)
+        
         
 
     def callback(self,data):

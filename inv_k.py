@@ -18,12 +18,10 @@ class ik():
         self.y = 0
         self.theta4=0
         self.theta6 = 0
-        #self.l = 0
-        #self.k = 125.35
+      
         rospy.init_node('ik', anonymous=True)
         self.pulse= 0
         self.sub1 =rospy.Subscriber("/joy", Joy, self.callback)
-        #self.sub2 =rospy.Subscriber("/joy",Joy,self.getencoder)
         self.pub4 = rospy.Publisher("inv_k",Int32,queue_size = 10)
         #self.pubpulse = rospy.Publisher("encoder",Float32,queue_size=10)
         
@@ -44,17 +42,7 @@ class ik():
 
         else:
             self.x +=0
-            self.y +=0
-
-        #if data.buttons[0] ==1 :
-            #self.l += 10
-
-        #elif data.buttons[1] ==1 :
-            #self.l -= 10 
-        #else :
-           # self.l +=0   
-
-        #rospy.loginfo(self.l)   
+            self.y +=0 
         rospy.loginfo(self.x)
         rospy.loginfo(self.y)
         self.a6 = 1
@@ -72,12 +60,10 @@ class ik():
         """"""""""
         self.pub4.publish(int(self.theta6*2352/360)) 
         
-        #self.pubpulse.publish(self.l) 
+     
         print("theta6 = ",self.theta6)
         print("theta4 = ",self.theta4)
-
-        #self.l6 = math.sqrt((a6**2)+(h**2) - (2*a6*k*math.cos(180 - theta6 - h)))
-        #self.l4 = math.sqrt((a4**2)+(i**2) - (2*a4*j*math.cos(180 - theta4)))
+        
     def listener(self):
         self.sub1
         #self.sub2

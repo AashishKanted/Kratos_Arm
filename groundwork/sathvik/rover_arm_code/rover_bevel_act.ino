@@ -1,19 +1,19 @@
 #include <ros.h>
 #include<std_msgs/Int8.h>
+#include<std_msgs/Int64.h>
 
 // bevels
-int DirPin_1 = 8;
-int DirPin_2 = 12;
-int PWM_1 = 9;
-int PWM_2 = 11;
+const int DirPin_1 = 12;
+const int DirPin_2 = 13;
+const int PWM_1 = 10;
+const int PWM_2 = 11;
 
 // actuators
-int DirPin_3 = 7;
-int DirPin_4 = 4;
-int PWM_3 = 3;
-int PWM_4 = 5;
+const int DirPin_3 = 7;
+const int DirPin_4 = 4;
+const int PWM_3 = 3;
+const int PWM_4 = 5;
 
-int speed = 25;
 int bevel;
 int actuator;
 
@@ -23,12 +23,12 @@ void message_bevel(const std_msgs::Int8& toggle_msg){
   bevel = toggle_msg.data;
 }
 
-void message_act(const std_msgs::Int8& toggle_msg){
+void message_act(const std_msgs::Int64& toggle_msg){
   actuator = toggle_msg.data;
 }
 
 ros::Subscriber<std_msgs::Int8> sub_bevel("controls_bevel", message_bevel);
-ros::Subscriber<std_msgs::Int8> sub_act("controls_act", message_act);
+ros::Subscriber<std_msgs::Int64> sub_act("controls_act", message_act);
 
 void setup() {
   
@@ -82,27 +82,27 @@ void loop() {
   }
 
   // actuator
-  if(actuator == 0){
+  if(actuator>255){
+    analogWrite(PWM_3, actuator-255);
+    digitalWrite(DirPin_3,HIGH);   
+  }
+  else if(actuator<-255){
+    analogWrite(PWM_3, (-1)*(actuator+255));
+    digitalWrite(DirPin_3,LOW);   
+  }
+  else if(actuator>0){
+    analogWrite(PWM_4, actuator);
+    digitalWrite(DirPin_4,HIGH);  
+  }
+  else if(actuator<0){
+    analogWrite(PWM_4, (-1)*actuator);
+    digitalWrite(DirPin_4,LOW);   
+  }
+  else {
     digitalWrite(PWM_3,LOW);
     digitalWrite(PWM_4,LOW);
     digitalWrite(DirPin_3,LOW);
     digitalWrite(DirPin_4,LOW);
-  }
-  else if(actuator == 1){
-    digitalWrite(PWM_3,HIGH);
-    digitalWrite(DirPin_3,HIGH);   
-  }
-  else if(actuator == 2){
-    digitalWrite(PWM_3,HIGH);
-    digitalWrite(DirPin_3,LOW);   
-  }
-  else if(actuator == 3){
-    digitalWrite(PWM_4,HIGH);
-    digitalWrite(DirPin_4,HIGH);  
-  }
-  else if(actuator == 4){
-    digitalWrite(PWM_4,HIGH);
-    digitalWrite(DirPin_4,LOW);   
   }
 
   nh.spinOnce();

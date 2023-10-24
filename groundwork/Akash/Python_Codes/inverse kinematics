@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+import math
+import rospy
+from geometry_msgs.msg import Twist
+
+link_1 = float(409.149)    # these are in mm
+link_2 = float(384.811)
+
+rospy.init_node('inverse_kinematics',anonymous=True)
+pub_inv = rospy.Publisher('inverse_kinematics_angles',Twist,queue_size=15)
+
+def get_angle(opp,side_1,side_2):                                 # cosine rule 
+    num = float(pow(side_1,2) + pow(side_2,2) - pow(opp,2))
+    denom = float(2*side_1*side_2)
+    angle_rad = math.acos(float(num)/float(denom))
+    angle_deg = float((angle_rad/math.pi)*180)
+    
+    return angle_deg
+
+x = float(input('Enter x coordinates in mm: '))                    # later on getting these from user in GUI and figuring out angles then implimenting it in PID
+y = float(input('Enter y coordinates in mm: '))
+dist = math.sqrt(pow(x,2) + pow(y,2))
+angles = Twist()
+
+if not ((dist < (link_1 - link_2)) or (dist > (link_1 + link_2))):
+    try:
+        angles.angular.x = get_angle(y,x,dist) + get_angle(link_2,link_1,dist)
+        angles.angular.y = get_angle(dist,link_1,link_2)
+        if(angles.angular.x < 90) and (angles.angular.y < 180) and (angles.angular.x > 0) and (angles.angular.y > 0):   
+            while not rospy.is_shutdown():
+                pub_inv.publish(angles)
+        else:
+            print('Angles are greater so cannot be reached')
+    except:
+        print('Invalid inputs try again: ')
+else:
+    print('Invalid inputs try again: ')

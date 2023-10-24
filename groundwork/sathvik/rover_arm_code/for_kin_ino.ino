@@ -20,6 +20,7 @@ void setup() {
 }
 
 void loop() {
+  // maps servo input from angles 0 to 180
   params.angular.x = map(analogRead(servoAnalogOut1),127,489, 0, 180);
   params.angular.y = map(analogRead(servoAnalogOut2),127,489, 0, 180);
 

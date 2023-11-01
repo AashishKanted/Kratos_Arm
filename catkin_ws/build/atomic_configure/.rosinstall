@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/varad/catkin_ws/devel/setup.sh

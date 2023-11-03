@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 import sys
 import json
 import openai
@@ -31,6 +34,12 @@ with open(sys.path[0] + '/secrets.json') as f:
 
 openai.api_key = api_key
 
+import rospy
+from std_msgs.msg import Int8, Int16
+
+rospy.init_node('arm_gpt', anonymous=True)
+publisher1 = rospy.Publisher('/arm_gpt', Int8, queue_size=10)
+
 # Function that accepts audio by microphone and converts it into text
 def listen():
     error = 0
@@ -40,6 +49,7 @@ def listen():
         print("Speak now:")
         try:
             audioMessage = recognizer.listen(source, timeout=10, phrase_time_limit=5)  # Set a 5-second timeout
+            error = 0
         except sr.WaitTimeoutError:
             outputMessage = "No speech detected within the 5-second timeout"
             error = 1
@@ -48,6 +58,7 @@ def listen():
     # Convert Audio -> Text
     try:
         outputMessage = recognizer.recognize_google(audioMessage, language='en-US')
+        error = 0
     except sr.UnknownValueError:
         outputMessage = "Google Speech Recognition could not understand audio"
         error = 1
@@ -62,7 +73,7 @@ def openaiCompletion(prompt, chat_history):
     functions = [
         {
             "name": "move_arm",
-            "description": "Moves the Arm go upwards or downwards based on user ask.",
+            "description": "Moves the Robotic Arm on the rover go upwards or downwards based on user ask.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -83,6 +94,8 @@ def openaiCompletion(prompt, chat_history):
             *chat_history,
             user_prompt,
         ],
+        functions=functions,
+        function_call="auto",
     )
 
     response_message = response["choices"][0]["message"]
@@ -98,7 +111,12 @@ def openaiCompletion(prompt, chat_history):
         return content,chat_history
    
 def move_arm(direction: int):
-    import rospy
+    print("arm will now move   :   ", direction)
+    
+    # rate = rospy.Rate(10)  #update once every second
+    
+    publisher1.publish(direction)
+
     
     
 
@@ -116,13 +134,13 @@ def handle_function(fn_call,chat_history: list):
             direction=function_args.get("direction"),
         )
     
-    
+    function_response_2 = "done task"
     chat_history.append(response_message)  # extend conversation with assistant's reply
     chat_history.append(
         {
             "role": "function",
             "name": function_name,
-            "content": function_response,
+            "content": function_response_2,
         }
     )
     # second_response = openai.ChatCompletion.create(
@@ -141,7 +159,7 @@ def handle_function(fn_call,chat_history: list):
 # Function that converts text into audio
 def textToAudio(text):
     engine = pyttsx3.init()  # Initialize Text -> Audio engine
-    engine.setProperty('rate', 150)  # Set the speaking rate (words per minute)
+    engine.setProperty('rate', 200)  # Set the speaking rate (words per minute)
     engine.setProperty('volume', 1)  # Set the volume (0 to 1)
     engine.say(text)
     engine.runAndWait()
@@ -150,14 +168,18 @@ def textToAudio(text):
 chat_history = []
 while True:
     inputMessage, error = listen()  # User audio input
+    print(inputMessage, error)
 
     if error == 0:
         try:
+            
             message, chat_history = openaiCompletion(inputMessage, chat_history)
+            # print(message)
         except:
             message = "I can't answer"
     else:
         message = "I didn't understand"
+        error = 0
 
     print(message)
 

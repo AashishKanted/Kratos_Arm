@@ -32,14 +32,14 @@ int vel;
 void messageCallback(const std_msgs::Int16MultiArray& receivedMsg)
 {
   int vel_la1 = receivedMsg.data[0];
-  if (receivedMsg.data[0] > 50) {
+  if (abs(receivedMsg.data[0]) > 50) {
     vel_la1 = receivedMsg.data[0];
   } else {
     vel_la1 = 0;
   }
 
   int vel_la2 = receivedMsg.data[1];
-  if (receivedMsg.data[1] > 50) {
+  if (abs(receivedMsg.data[1]) > 50) {
     vel_la2 = receivedMsg.data[1];
   } else {
     vel_la2 = 0;
@@ -47,34 +47,34 @@ void messageCallback(const std_msgs::Int16MultiArray& receivedMsg)
 
   int var_st = receivedMsg.data[2];
 
-  if(vel_la1 == 0 && vel_la2 == 0){
+  if(receivedMsg.data[0]== 0 && receivedMsg.data[1] == 0){
     analogWrite(PWM4, 0);
     analogWrite(PWM6, 0);
     
     digitalWrite(DIR4, LOW);
     digitalWrite(DIR6, LOW);
   }
-  else if(vel_la1 > 0 && vel_la2 > 0){
-    analogWrite(PWM4, vel_la1);     
-    analogWrite(PWM6, vel_la2);  //linear actuators 1 and 2 extend
+  else if(receivedMsg.data[0] > 0 && receivedMsg.data[1] > 0){
+    analogWrite(PWM4, abs(vel_la1));     
+    analogWrite(PWM6, abs(vel_la2));  //linear actuators 1 and 2 extend
     digitalWrite(DIR4, HIGH);
     digitalWrite(DIR6, HIGH);
   }
-  else if(vel_la1 < 0 && vel_la2 < 0){
-    analogWrite(PWM4, -vel_la1);
-    analogWrite(PWM6, -vel_la2);  //linear actuators 1 and 2 retract 
+  else if(receivedMsg.data[0] < 0 && receivedMsg.data[1] < 0){
+    analogWrite(PWM4, abs(vel_la1));
+    analogWrite(PWM6, abs(vel_la2));  //linear actuators 1 and 2 retract 
     digitalWrite(DIR4, LOW);
     digitalWrite(DIR6, LOW);
   }
-  else if(vel_la1 < 0 && vel_la2 > 0){
-    analogWrite(PWM4, -vel_la1);
-    analogWrite(PWM6, vel_la2);  //linear actuator 1 extends and linear actuator 2 retracts
+  else if(receivedMsg.data[0] < 0 && receivedMsg.data[1] > 0){
+    analogWrite(PWM4, abs(vel_la1));
+    analogWrite(PWM6, abs(vel_la2));  //linear actuator 1 extends and linear actuator 2 retracts
     digitalWrite(DIR4 , LOW);
     digitalWrite(DIR6, HIGH);
   }
-  else if(vel_la1 > 0 && vel_la2 < 0){
-    analogWrite(PWM4, vel_la1);
-    analogWrite(PWM6, -vel_la2);  //linear actuator 1 retracts and linear actuator 2 extends
+  else if(receivedMsg.data[0] > 0 && receivedMsg.data[1] < 0){
+    analogWrite(PWM4, abs(vel_la1));
+    analogWrite(PWM6, abs(vel_la2));  //linear actuator 1 retracts and linear actuator 2 extends
     digitalWrite(DIR4, HIGH);
     digitalWrite(DIR6, LOW);
   }

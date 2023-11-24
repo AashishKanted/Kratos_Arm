@@ -1,0 +1,426 @@
+{
+  "configById": {
+    "Tab!4aelyd3": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "CO2",
+          "layout": "Plot!4jn2y8x"
+        }
+      ]
+    },
+    "Tab!3f5n4eh": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "CH4",
+          "layout": "Plot!22jg6ut"
+        }
+      ]
+    },
+    "Tab!1inofsn": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "CO",
+          "layout": "Plot!2mpqjzj"
+        }
+      ]
+    },
+    "Plot!4jn2y8x": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/co2_y.data[:]",
+          "enabled": true,
+          "label": "y - ppm",
+          "lineSize": 10,
+          "color": "#6cfdff"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "",
+          "enabled": true,
+          "label": "x - time",
+          "lineSize": 10
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "currentCustom",
+      "sidebarDimension": 240,
+      "xAxisPath": {
+        "value": "/co2_x.data[:]"
+      },
+      "minYValue": 550,
+      "maxYValue": 720
+    },
+    "Plot!22jg6ut": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/ch4_y.data[:]",
+          "enabled": true,
+          "color": "#6ee34f",
+          "label": "y - ppm",
+          "lineSize": 10
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "",
+          "enabled": true,
+          "label": "x-  time"
+        }
+      ],
+      "minYValue": 1.5,
+      "maxYValue": 2.3,
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "currentCustom",
+      "sidebarDimension": 240,
+      "xAxisPath": {
+        "value": "/ch4_x.data[:]"
+      }
+    },
+    "Plot!2mpqjzj": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/co_y.data[:]",
+          "enabled": true,
+          "lineSize": 10,
+          "label": "y - ppm"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "",
+          "enabled": true,
+          "label": "x - time"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "currentCustom",
+      "sidebarDimension": 240,
+      "xAxisPath": {
+        "value": "/co_x.data[:]"
+      },
+      "minYValue": 5,
+      "maxYValue": 5.5
+    },
+    "Tab!46ldlst": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Bradford assay",
+          "layout": "Plot!17pzj2o"
+        }
+      ]
+    },
+    "Tab!3g1wa47": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Chlorophyll",
+          "layout": "Plot!sw89vc"
+        }
+      ]
+    },
+    "Tab!2iuqjzf": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Button",
+          "layout": "Publish!4mhpbm"
+        }
+      ]
+    },
+    "Plot!17pzj2o": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/brad_y.data[:]",
+          "enabled": true,
+          "lineSize": 10,
+          "color": "#ffa444",
+          "label": "y - absorbance"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "",
+          "enabled": true,
+          "label": "x - wavelength"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "currentCustom",
+      "sidebarDimension": 240,
+      "xAxisPath": {
+        "value": "/brad_x.data[:]"
+      }
+    },
+    "Plot!sw89vc": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/chloro_y.data[:]",
+          "enabled": true,
+          "label": "y - absorbance",
+          "lineSize": 10,
+          "color": "#000000"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "",
+          "enabled": true,
+          "label": "x - wavelength"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "currentCustom",
+      "sidebarDimension": 240,
+      "foxglovePanelTitle": "",
+      "xAxisPath": {
+        "value": "/chloro_x.data[:]"
+      }
+    },
+    "Publish!4mhpbm": {
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\n  \"layout\": {\n    \"dim\": [\n      {\n        \"label\": \"\",\n        \"size\": 0,\n        \"stride\": 0\n      }\n    ],\n    \"data_offset\": 0\n  },\n  \"data\": [\n    0,0,0,0,0,0,0\n  ]\n}",
+      "topicName": "/array_y",
+      "datatype": "std_msgs/Float32MultiArray",
+      "buttonText": "Clear",
+      "buttonColor": "#e40b0b"
+    },
+    "Tab!1fzfel5": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Results",
+          "layout": "RawMessages!eqdzxv"
+        }
+      ]
+    },
+    "Tab!388c9r2": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Button",
+          "layout": "Publish!2tt1glb"
+        }
+      ]
+    },
+    "RawMessages!eqdzxv": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/array_y",
+      "fontSize": 24
+    },
+    "Publish!2tt1glb": {
+      "buttonText": "Button",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{}",
+      "buttonColor": "#e40b0b"
+    },
+    "Tab!1tlvefz": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Video Feed",
+          "layout": "3D!2kk8kmj"
+        }
+      ]
+    },
+    "Tab!3zctufl": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "",
+          "layout": "Publish!16h1krb"
+        }
+      ]
+    },
+    "3D!2kk8kmj": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 45,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {}
+    },
+    "Publish!16h1krb": {
+      "buttonText": "Button",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{}",
+      "buttonColor": "#e40b0b"
+    },
+    "3D!2d55n8": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 45,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {}
+    },
+    "Tab!2vzz55p": {
+      "activeTabIdx": 1,
+      "tabs": [
+        {
+          "title": "Sensor readings",
+          "layout": {
+            "first": {
+              "first": "Tab!4aelyd3",
+              "second": "Tab!3f5n4eh",
+              "direction": "column",
+              "splitPercentage": 51.68539325842697
+            },
+            "second": "Tab!1inofsn",
+            "direction": "row",
+            "splitPercentage": 60.10416666666667
+          }
+        },
+        {
+          "title": "Spectrometer",
+          "layout": {
+            "first": {
+              "first": "Tab!46ldlst",
+              "second": "Tab!3g1wa47",
+              "direction": "row"
+            },
+            "second": "Tab!2iuqjzf",
+            "direction": "column",
+            "splitPercentage": 81.81818181818183
+          }
+        },
+        {
+          "title": "ML Box",
+          "layout": {
+            "first": "Tab!1fzfel5",
+            "second": "Tab!388c9r2",
+            "direction": "column",
+            "splitPercentage": 84.85607008760951
+          }
+        },
+        {
+          "title": "Panorama",
+          "layout": {
+            "first": "Tab!1tlvefz",
+            "second": "Tab!3zctufl",
+            "direction": "column",
+            "splitPercentage": 84.73091364205257
+          }
+        },
+        {
+          "title": "Digital Microscope",
+          "layout": "3D!2d55n8"
+        }
+      ]
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {
+    "8e6019fc-11b8-4cb8-86d3-995a4de35eab": {
+      "sourceCode": "// Check if the document has fully loaded\ndocument.addEventListener(\"DOMContentLoaded\", () => {\n    // Create a button element\n    const button: HTMLButtonElement = document.createElement(\"button\");\n\n    // Set the button text\n    button.innerHTML = \"Click me\";\n\n    // Add a click event listener to the button\n    button.addEventListener(\"click\", () => {\n        // Your custom logic when the button is clicked\n        console.log(\"Button clicked!\");\n    });\n\n    // Append the button to the document body or a specific container\n    document.body.appendChild(button);\n});\n",
+      "name": "8e6019fc"
+    }
+  },
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": "Tab!2vzz55p"
+}

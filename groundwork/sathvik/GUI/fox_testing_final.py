@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import rospy
-from std_msgs.msg import  Int16, Float32MultiArray, Float32, String
+from std_msgs.msg import  Float32MultiArray
 
 
 flag = 1
@@ -27,9 +27,6 @@ brad_x = rospy.Publisher("/brad_x", Float32MultiArray, queue_size=1)
 # Chlorophyll publishers
 chloro_y = rospy.Publisher("/chloro_y", Float32MultiArray, queue_size=1)
 chloro_x = rospy.Publisher("/chloro_x", Float32MultiArray, queue_size=1)
-
-ml_pub = rospy.Publisher("/ml", String, queue_size=1)
-
 
 y_val = Float32MultiArray()
 x_val = Float32MultiArray()
@@ -99,29 +96,6 @@ chlorophyll = {
     705: 0.1
 }
 
-
-'''
-x_val.data = [1,2,3,4,5]
-y_val.data = [1,3,4,2,0]
-'''
-
-str_inp = """Running on GPU...
-
-Total number of images for site 1 = 50
-Total breakdown for site 1:
-Basalt: 0.211579004590509
-Conglomerate: 0.154108799183155
-Coprolite: 0.064276531761994
-Dolomite: 0.016016354133365
-Fossil: 0.053301881200145
-Granite: 0.131860339753656
-Limestone: 0.965734889819681
-Obsidian: 0.189001124311103
-Sandstone: 0.071260748078191
-Shale: 0.044254417612316
-
-Final Prediction: Limestone"""
-
 while not rospy.is_shutdown():
     if (flag):
         try:
@@ -153,7 +127,6 @@ while not rospy.is_shutdown():
                 break
         except:
             pass
-    
-    # ml_pub.publish(str_inp)
+
     
 rospy.spin()

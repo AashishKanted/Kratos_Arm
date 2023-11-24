@@ -138,15 +138,6 @@
         }
       ]
     },
-    "Tab!2iuqjzf": {
-      "activeTabIdx": 0,
-      "tabs": [
-        {
-          "title": "Button",
-          "layout": "Publish!4mhpbm"
-        }
-      ]
-    },
     "Plot!17pzj2o": {
       "paths": [
         {
@@ -206,30 +197,17 @@
         "value": "/chloro_x.data[:]"
       }
     },
-    "Publish!4mhpbm": {
-      "buttonTooltip": "",
-      "advancedView": false,
-      "value": "{\n  \"layout\": {\n    \"dim\": [\n      {\n        \"label\": \"\",\n        \"size\": 0,\n        \"stride\": 0\n      }\n    ],\n    \"data_offset\": 0\n  },\n  \"data\": [\n    0,0,0,0,0,0,0\n  ]\n}",
-      "topicName": "/array_y",
-      "datatype": "std_msgs/Float32MultiArray",
-      "buttonText": "Clear",
-      "buttonColor": "#e40b0b"
-    },
     "Tab!1fzfel5": {
       "activeTabIdx": 0,
       "tabs": [
         {
           "title": "Results",
-          "layout": "RawMessages!eqdzxv"
-        }
-      ]
-    },
-    "Tab!388c9r2": {
-      "activeTabIdx": 0,
-      "tabs": [
-        {
-          "title": "Button",
-          "layout": "Publish!2tt1glb"
+          "layout": {
+            "first": "RawMessages!eqdzxv",
+            "second": "Image!2aqqqpf",
+            "direction": "row",
+            "splitPercentage": 32.65625
+          }
         }
       ]
     },
@@ -238,15 +216,52 @@
       "diffMethod": "custom",
       "diffTopicPath": "",
       "showFullMessageForDiff": false,
-      "topicPath": "/array_y",
+      "topicPath": "/ml",
       "fontSize": 24
     },
-    "Publish!2tt1glb": {
-      "buttonText": "Button",
-      "buttonTooltip": "",
-      "advancedView": false,
-      "value": "{}",
-      "buttonColor": "#e40b0b"
+    "Image!2aqqqpf": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 45,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/camera/image_raw"
+      }
     },
     "Tab!1tlvefz": {
       "activeTabIdx": 0,
@@ -358,7 +373,7 @@
       "imageMode": {}
     },
     "Tab!2vzz55p": {
-      "activeTabIdx": 1,
+      "activeTabIdx": 2,
       "tabs": [
         {
           "title": "Sensor readings",
@@ -377,24 +392,14 @@
         {
           "title": "Spectrometer",
           "layout": {
-            "first": {
-              "first": "Tab!46ldlst",
-              "second": "Tab!3g1wa47",
-              "direction": "row"
-            },
-            "second": "Tab!2iuqjzf",
-            "direction": "column",
-            "splitPercentage": 81.81818181818183
+            "first": "Tab!46ldlst",
+            "second": "Tab!3g1wa47",
+            "direction": "row"
           }
         },
         {
           "title": "ML Box",
-          "layout": {
-            "first": "Tab!1fzfel5",
-            "second": "Tab!388c9r2",
-            "direction": "column",
-            "splitPercentage": 84.85607008760951
-          }
+          "layout": "Tab!1fzfel5"
         },
         {
           "title": "Panorama",

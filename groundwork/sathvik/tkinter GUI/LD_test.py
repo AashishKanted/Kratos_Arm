@@ -19,6 +19,8 @@ def flag_func(data):
     
 # Sensors publisher
 pub_sensor = rospy.Publisher("/sensors", sensor_msg, queue_size=1)
+pub_spectro = rospy.Publisher("/spectrometer", spectro_msg, queue_size=1)
+
 flag_sub = rospy.Subscriber('/flag_topic', Int8, flag_func)
 
 co2_sensor = {
@@ -86,13 +88,14 @@ chlorophyll = {
 }
 
 data_sensor = sensor_msg()
+data_spectro = spectro_msg()
 
 while not rospy.is_shutdown():
     if (flag==1):
         try:
             for i in range(len(co2_sensor)):
                 if old_flag!=flag:
-                    print(i)
+                    print(1)
                     data_sensor.co2 = list(co2_sensor.values())[i]
                     data_sensor.ch4 = list(ch4_sensor.values())[i]
                     data_sensor.co = list(co_sensor.values())[i]
@@ -103,35 +106,22 @@ while not rospy.is_shutdown():
 
         except:
             pass
+    
+    elif (flag==2):
+        try:
+            for j in range(len(bradford_assay)):
+                if old_flag!=flag:
+                    print(2)
+                    data_spectro.brad = list(bradford_assay.values())[j]
+                    data_spectro.chloro = list(chlorophyll.values())[j]
+                    pub_spectro.publish(data_spectro)
+                    rospy.sleep(1)
+            else:
+                flag = old_flag
+
+        except:
+            pass
         
 
 rospy.spin()
 
-
-# while not rospy.is_shutdown():
-#     if (flag):
-#         try:
-#             for i in range(15):
-#                 data_sensor.co2 = co2_sensor.values()[i]
-#                 data_sensor.ch4 = ch4_sensor.values()[i]
-#                 data_sensor.co = co_sensor.values()[i]
-#                 pub_sensor.publish(data_sensor)
-#                 print(10)
-#                 rospy.sleep(1)
-            
-#             if (i==14):
-#                 flag = 0
-#                 break
-#         except:
-#             pass
-
-# flag = 0
-# old_flag = 0
-
-# rospy.init_node("gui_test", anonymous=True)
-
-# def flag_func(data):
-#     global flag, old_flag
-#     old_flag = flag
-#     flag = data.data
-#     print(flag)

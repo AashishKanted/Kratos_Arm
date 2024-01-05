@@ -7,13 +7,15 @@ Main module for GUI.
 import rospy
 from std_msgs.msg import Int8
 import tkinter as tk
-from tkinter import ttk
+from tkinter import (
+    ttk, filedialog, messagebox)
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (
      FigureCanvasTkAgg)
 from matplotlib import style
 import threading
 from datetime import datetime
+import csv
 
 from  gui_stuff.msg import *
 
@@ -47,7 +49,7 @@ def ros_thread():
     global flag_pub
     flag_pub = rospy.Publisher("/flag_topic", Int8, queue_size=1)
     
-    # SUbscribers
+    # Subscribers
     rospy.Subscriber("/sensors", sensor_msg, sensor_callback)
     rospy.Subscriber("/spectrometer", spectro_msg, spectro_callback)
     rospy.spin()
@@ -58,6 +60,10 @@ def close_func():
 
 # frontend functions
 def sensor_rec_plot():
+    ax1.clear()
+    ax2.clear()
+    ax3.clear()
+    
     ax1.plot(sensor_x, co2_y, 'b^-')
     ax1.set_title('CO2 plot')
     ax1.set_xlabel('time')
@@ -82,15 +88,14 @@ def sensor_plot():
         # sensor_x.append(round((datetime.now() - sensor_start).total_seconds()))
         sensor_x.append(((datetime.now() - sensor_start).total_seconds()))
     
-    ax1.clear()
-    ax2.clear()
-    ax3.clear()
-    
     sensor_rec_plot()
     
     canvas_sensor.draw_idle()
     
 def spectro_rec_plot():
+    ax4.clear()
+    ax5.clear()
+    
     ax4.plot(spectro_x, brad_y, 'b^-')
     ax4.set_title('Bradford assay')
     ax4.set_xlabel('wavelength')
@@ -107,10 +112,7 @@ def spectro_plot():
         spectro_start = datetime.now()
         spectro_x.append(0)
     else:
-        spectro_x.append(((datetime.now() - spectro_start).total_seconds()))
-    
-    ax4.clear()
-    ax5.clear()
+        spectro_x.append((datetime.now() - spectro_start).total_seconds())
     
     spectro_rec_plot()
     
@@ -122,6 +124,46 @@ def sensor_button_click():
 
 def spectro_button_click():
     flag_pub.publish(2)
+    
+def sensor_save():
+    file_path = filedialog.asksaveasfilename()
+    if file_path:
+        with open(file_path, mode='w', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(sensor_x)
+            writer.writerow(co2_y)
+            writer.writerow(ch4_y)
+            writer.writerow(co_y)
+            
+    sensor_x.clear()
+    co2_y.clear()
+    ch4_y.clear()
+    co_y.clear()
+    
+    sensor_rec_plot()
+    canvas_sensor.draw_idle()
+
+    messagebox.showinfo(f"Save info", "Your file has been saved")
+
+def spectro_save():
+    file_path = filedialog.asksaveasfilename()
+    if file_path:
+        with open(file_path, mode='w', newline='') as csv_file:
+            data = [brad_y, chloro_y]
+            
+            writer = csv.writer(csv_file)
+            writer.writerow(spectro_x)
+            writer.writerow(brad_y)
+            writer.writerow(chloro_y)
+            
+    spectro_x.clear()
+    brad_y.clear()
+    chloro_y.clear()
+    
+    spectro_rec_plot()
+    canvas_spectro.draw_idle()
+
+    messagebox.showinfo(f"Save info", "Your file has been saved")
 
 rospy.init_node("LD_gui", anonymous=True)
 
@@ -156,6 +198,7 @@ notebook.add(digi_micro, text="Digital Microscope")
 notebook.pack(expand=True, fill='both')
 
 # sensor window
+
 sensor_fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 4))
 
 sensor_rec_plot()
@@ -166,6 +209,9 @@ canvas_sensor.get_tk_widget().pack(padx=35, pady=35)
 
 sensor_button = tk.Button(master=sensors, text='Publish trigger', command=sensor_button_click)
 sensor_button.pack(padx=15, pady=25)
+
+save_sensor = tk.Button(master=sensors, text="Save values", command=sensor_save)
+save_sensor.pack(padx=15, pady=25)
 
 # spectro window
 spectro_fig, (ax4, ax5) = plt.subplots(1, 2, figsize=(16, 4))
@@ -178,6 +224,9 @@ canvas_spectro.get_tk_widget().pack(padx=35, pady=35)
 
 spectro_button = tk.Button(master=spectro, text='Publish trigger', command=spectro_button_click)
 spectro_button.pack(padx=15, pady=25)
+
+save_spectro = tk.Button(master=spectro, text="Save values", command=spectro_save)
+save_spectro.pack(padx=15, pady=25)
 
 plt.tight_layout()
 

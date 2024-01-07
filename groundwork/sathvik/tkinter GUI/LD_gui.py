@@ -5,7 +5,9 @@ Main module for GUI.
 '''
 
 import rospy
-from std_msgs.msg import Int8
+from std_msgs.msg import Int8, String
+from sensor_msgs.msg import Image as RosImage
+from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import (
     ttk, filedialog, messagebox)
@@ -13,6 +15,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (
      FigureCanvasTkAgg)
 from matplotlib import style
+from cv_bridge import CvBridge
+import cv2
 import threading
 from datetime import datetime
 import csv
@@ -31,6 +35,7 @@ chloro_y = []
 
 
 # backend functions
+# callback functions
 def sensor_callback(data):
     global co2_y, ch4_y, co_y
     co2_y.append(data.co2)
@@ -44,7 +49,23 @@ def spectro_callback(data):
     chloro_y.append(data.chloro)
     spectro_plot()
 
+def ml_callback(data):
+    ml_vid_obj = CvBridge()
+    converted = ml_vid_obj.imgmsg_to_cv2(data)
+    resized = cv2.resize(converted, (960, 640))  # Resize the image as needed
+    image = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
+    img = Image.fromarray(image)
+    imgtk = ImageTk.PhotoImage(image=img)
+    vid_label.imgtk = imgtk
+    vid_label.config(image=imgtk)
+
+def ml_text_callback(data):
+    text_label.config(text=data.data)
+
 def ros_thread():
+    '''
+    Separate thread for ros with all publishers and subscribers
+    '''
     # Publishers
     global flag_pub
     flag_pub = rospy.Publisher("/flag_topic", Int8, queue_size=1)
@@ -52,6 +73,8 @@ def ros_thread():
     # Subscribers
     rospy.Subscriber("/sensors", sensor_msg, sensor_callback)
     rospy.Subscriber("/spectrometer", spectro_msg, spectro_callback)
+    rospy.Subscriber("/camera/image_raw", RosImage, ml_callback)
+    rospy.Subscriber("/ml", String, ml_text_callback)
     rospy.spin()
 
 def close_func():
@@ -60,6 +83,9 @@ def close_func():
 
 # frontend functions
 def sensor_rec_plot():
+    '''
+    Clears previous plot and names the axes for sensors readings
+    '''
     ax1.clear()
     ax2.clear()
     ax3.clear()
@@ -80,6 +106,9 @@ def sensor_rec_plot():
     ax3.set_ylabel('ppm')
 
 def sensor_plot():
+    '''
+    Plots the received sensor readings
+    '''
     global sensor_start
     if len(sensor_x)==0:
         sensor_start = datetime.now()
@@ -93,6 +122,9 @@ def sensor_plot():
     canvas_sensor.draw_idle()
     
 def spectro_rec_plot():
+    '''
+    Clears previous plot and names the axes for spectrometer readings
+    '''
     ax4.clear()
     ax5.clear()
     
@@ -107,6 +139,9 @@ def spectro_rec_plot():
     ax5.set_ylabel('absorbance')
 
 def spectro_plot():
+    '''
+    Plots the received spectrometer readings
+    '''
     global spectro_start
     if len(spectro_x)==0:
         spectro_start = datetime.now()
@@ -118,13 +153,7 @@ def spectro_plot():
     
     canvas_spectro.draw_idle()
 
-# button click functions
-def sensor_button_click():
-    flag_pub.publish(1)
-
-def spectro_button_click():
-    flag_pub.publish(2)
-    
+# save buttons
 def sensor_save():
     file_path = filedialog.asksaveasfilename()
     if file_path:
@@ -164,6 +193,22 @@ def spectro_save():
     canvas_spectro.draw_idle()
 
     messagebox.showinfo(f"Save info", "Your file has been saved")
+
+# button click functions
+def sensor_button_click():
+    flag_pub.publish(1)
+
+def spectro_button_click():
+    flag_pub.publish(2)
+
+def ml_button_click():
+    flag_pub.publish(3)
+
+def panorama_button_click():
+    flag_pub.publish(4)
+
+def digi_button_click():
+    flag_pub.publish(5)
 
 rospy.init_node("LD_gui", anonymous=True)
 
@@ -227,6 +272,25 @@ spectro_button.pack(padx=15, pady=25)
 
 save_spectro = tk.Button(master=spectro, text="Save values", command=spectro_save)
 save_spectro.pack(padx=15, pady=25)
+
+# ml window
+vid_label = tk.Label(ml_box)
+vid_label.pack(padx=15, pady=25, side='left')
+
+text_label = tk.Label(ml_box, text="Loading...")
+text_label.pack(padx=15, pady=25)
+
+ml_button = tk.Button(master=ml_box, text='Publish trigger', command=ml_button_click)
+ml_button.pack(padx=15, pady=25)
+
+# panorama window
+panorama_button = tk.Button(master=panorama, text='Publish trigger', command=panorama_button_click)
+panorama_button.pack(padx=15, pady=25, side='bottom')
+
+# digital microscope window
+digi_button = tk.Button(master=digi_micro, text='Publish trigger', command=digi_button_click)
+digi_button.pack(padx=15, pady=25)
+
 
 plt.tight_layout()
 

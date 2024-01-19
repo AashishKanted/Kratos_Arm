@@ -18,8 +18,10 @@ from matplotlib import style
 from cv_bridge import CvBridge
 import cv2
 import threading
+import subprocess
 from datetime import datetime
 import csv
+import os
 
 from  gui_stuff.msg import *
 
@@ -75,6 +77,7 @@ def ros_thread():
     rospy.Subscriber("/spectrometer", spectro_msg, spectro_callback)
     rospy.Subscriber("/camera/image_raw", RosImage, ml_callback)
     rospy.Subscriber("/ml", String, ml_text_callback)
+    
     rospy.spin()
 
 def close_func():
@@ -210,6 +213,53 @@ def panorama_button_click():
 def digi_button_click():
     flag_pub.publish(5)
 
+def vid_feed_click_1():
+    global feed_state_1
+    print(feed_state_1)
+    if feed_state_1:
+        feed_state_1 = 0
+        # subprocess.Popen(['./camfeed1.sh'])
+        # subprocess.Popen(['./videofeed1.sh'])
+        subprocess.Popen(["bash", "./bash_init.sh"])
+    else:
+        try:
+            feed_state_1 = 1
+            # os.system("pkill camfeed1")
+            # os.system("pkill videofeed1")
+            os.system("pkill hello_world")
+        except ProcessLookupError:
+            pass
+
+def vid_feed_click_2():
+    global feed_state_2
+    if feed_state_2:
+        feed_state_2 = 0
+        # subprocess.Popen(['./camfeed2.sh'])
+        subprocess.Popen(['./videofeed2.sh'])
+    else:
+        try:
+            feed_state_2 =1
+            os.system("pkill hello_world")
+            # os.system("pkill camfeed2")
+            # os.system("pkill videofeed2")
+        except ProcessLookupError:
+            pass
+
+def vid_feed_click_3():
+    global feed_state_3
+    if feed_state_3:
+        feed_state_3 = 0
+        subprocess.Popen(['./camfeed3.sh'])
+        subprocess.Popen(['./videofeed3.sh'])
+    else:
+        try:
+            feed_state_2 = 1
+            os.system("pkill camfeed3")
+            os.system("pkill videofeed3")
+        except ProcessLookupError:
+            pass
+
+# main program
 rospy.init_node("LD_gui", anonymous=True)
 
 # Set daemon as parameter as True
@@ -218,7 +268,7 @@ ros_t.start()
 
 # root window definition
 main_win = tk.Tk()
-main_win.title('Life Detection Window')
+main_win.title('PROJECT KRATOS')
 # main_win.geometry('1600x900')
 
 style.use("ggplot")
@@ -226,23 +276,29 @@ style.use("ggplot")
 main_win.protocol('WM_DELETE_WINDOW', close_func)
 
 # Create different tabs and add titles
-notebook = ttk.Notebook(main_win)
+main_note = ttk.Notebook(main_win)
 
-sensors = tk.Frame(notebook)
-spectro = tk.Frame(notebook)
-ml_box = tk.Frame(notebook)
-panorama = tk.Frame(notebook)
-digi_micro = tk.Frame(notebook)
+note_LD = ttk.Notebook(main_note)
+note_controls = ttk.Notebook(main_note)
 
-notebook.add(sensors, text="Sensor readings")
-notebook.add(spectro, text="Spectrometer")
-notebook.add(ml_box, text="ML box")
-notebook.add(panorama, text="Panorama")
-notebook.add(digi_micro, text="Digital Microscope")
+main_note.add(note_LD, text="LD tab")
+main_note.add(note_controls, text="Controls tab")
 
-notebook.pack(expand=True, fill='both')
+main_note.pack(expand=True, fill='both')
 
+# LD gui
 # sensor window
+sensors = tk.Frame(note_LD)
+spectro = tk.Frame(note_LD)
+ml_box = tk.Frame(note_LD)
+panorama = tk.Frame(note_LD)
+digi_micro = tk.Frame(note_LD)
+
+note_LD.add(sensors, text="Sensor readings")
+note_LD.add(spectro, text="Spectrometer")
+note_LD.add(ml_box, text="ML box")
+note_LD.add(panorama, text="Panorama")
+note_LD.add(digi_micro, text="Digital Microscope")
 
 sensor_fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 4))
 
@@ -285,14 +341,40 @@ ml_button.pack(padx=15, pady=25)
 
 # panorama window
 panorama_button = tk.Button(master=panorama, text='Publish trigger', command=panorama_button_click)
-panorama_button.pack(padx=15, pady=25, side='bottom')
+panorama_button.pack(padx=15, pady=25)
 
 # digital microscope window
 digi_button = tk.Button(master=digi_micro, text='Publish trigger', command=digi_button_click)
 digi_button.pack(padx=15, pady=25)
 
+# Controls gui
+# camera feeds
+vid_feed = tk.Frame(note_controls)
+
+note_controls.add(vid_feed, text="Video feeds")
+
+feed_frame_1 = tk.Frame(vid_feed)
+feed_frame_2 = tk.Frame(vid_feed)
+feed_frame_3 = tk.Frame(vid_feed)
+
+feed_frame_1.pack()
+feed_frame_2.pack()
+feed_frame_3.pack()
+
+feed_state_1 = 1
+feed_state_2 = 1
+feed_state_3 = 1
+
+feed_but_1 = tk.Button(master=feed_frame_1, text="Feed 1", command=vid_feed_click_1)
+feed_but_2 = tk.Button(master=feed_frame_2, text="Feed 2", command=vid_feed_click_2)
+feed_but_3 = tk.Button(master=feed_frame_3, text="Feed 3", command=vid_feed_click_3)
+
+feed_but_1.pack(padx=25, pady=25)
+feed_but_2.pack(padx=25, pady=25)
+feed_but_3.pack(padx=25, pady=25)
 
 plt.tight_layout()
 
 
 main_win.mainloop()
+

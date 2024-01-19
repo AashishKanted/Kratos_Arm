@@ -19,7 +19,7 @@ try:
 
         for c in data:
             if c == ',' and meow != "":
-                reading.append(float(meow))
+                reading.append(round(float(meow), 2))
                 meow = ""
             else:
                 meow += c

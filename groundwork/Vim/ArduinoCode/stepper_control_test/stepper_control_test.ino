@@ -3,8 +3,8 @@
   More info: https://www.makerguides.com */
 
 // Define stepper motor connections:
-#define dirPin 5
-#define stepPin 6
+#define dirPin 4
+#define stepPin 11
 
 void setup() {
   // Declare pins as output:
@@ -18,7 +18,7 @@ void setup() {
 void loop() {
   // These four lines result in 1 step:
   digitalWrite(stepPin, HIGH);
-  delayMicroseconds();
+  delayMicroseconds(500);
   digitalWrite(stepPin, LOW);
   delayMicroseconds(500);
 }

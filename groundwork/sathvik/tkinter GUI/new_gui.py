@@ -31,6 +31,8 @@ co2_y = []
 ch4_y = []
 co_y = []
 
+# spectro_time = datetime.now()
+
 spectro_x = []
 brad_y = []
 chloro_y = []
@@ -47,9 +49,14 @@ def sensor_callback(data):
 
 def spectro_callback(data):
     global brad_y, chloro_y
-    brad_y.append(data.brad)
-    chloro_y.append(data.chloro)
-    spectro_plot()
+    if data.brad!=-1:
+        brad_y.append(data.brad)
+        chloro_y.append(data.chloro)
+    else:
+        print(data.brad)
+        global spectro_x
+        spectro_x = [1, 2, 3, 4, 5]
+        spectro_plot()
 
 def ml_callback(data):
     ml_vid_obj = CvBridge()
@@ -128,14 +135,19 @@ def spectro_rec_plot():
     '''
     Clears previous plot and names the axes for spectrometer readings
     '''
+    # global spectro_time
+    # if (spectro_time-datetime.now()).total_seconds > 1:
+    #     brad_y.clear()
+    #     chloro_y.clear()
+    #     spectro_time = datetime.now()
+    
     ax4.clear()
     ax5.clear()
-    
+    print(spectro_x, brad_y, chloro_y)
     ax4.plot(spectro_x, brad_y, 'b^-')
     ax4.set_title('Bradford assay')
     ax4.set_xlabel('wavelength')
     ax4.set_ylabel('absorbance')
-
     ax5.plot(spectro_x, chloro_y, 'r^-')
     ax5.set_title('Chlorophyll')
     ax5.set_xlabel('wavelength')
@@ -145,16 +157,21 @@ def spectro_plot():
     '''
     Plots the received spectrometer readings
     '''
-    global spectro_start
-    if len(spectro_x)==0:
-        spectro_start = datetime.now()
-        spectro_x.append(0)
-    else:
-        spectro_x.append((datetime.now() - spectro_start).total_seconds())
+    # global spectro_start
+    # if len(spectro_x)==0:
+    #     spectro_start = datetime.now()
+    #     spectro_x.append(0)
+    # else:
+    #     spectro_x.append((datetime.now() - spectro_start).total_seconds())
     
     spectro_rec_plot()
     
+    print(brad_y, chloro_y)
+    
     canvas_spectro.draw_idle()
+    
+    brad_y.clear()
+    chloro_y.clear()
 
 # save buttons
 def sensor_save():

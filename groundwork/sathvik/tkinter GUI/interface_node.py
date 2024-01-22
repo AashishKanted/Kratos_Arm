@@ -1,3 +1,8 @@
+'''
+This code is now obsolete
+Everything contained in Spectro_ros.py script
+'''
+
 import rospy
 import time
 from std_msgs.msg import Float32MultiArray

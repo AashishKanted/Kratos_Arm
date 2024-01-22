@@ -16,7 +16,7 @@ class JoystickControl:
           self.msg = Int16MultiArray()
         
           self.sub = rospy.Subscriber("/joy", Joy, self.callback)
-          self.pub = rospy.Publisher("/control2", Int16MultiArray, queue_size=1)
+          self.pub = rospy.Publisher("/ld_uno", Int16MultiArray, queue_size=1)
         
      def callback(self, data):
           joy_pump1= data.axes[-1] # axes[5] //controls pumps
@@ -25,7 +25,7 @@ class JoystickControl:
           xAxis1 = data.axes[3] # axes[3]  //controls mixer
           yAxis1 = data.axes[4] # axes[4]  //controls auger
 
-          triangle = data.buttons[2] # buttons[2] //controls Stepper (for enabling)
+          triangle = data.buttons[2] # buttons[2] //controls Stepper (for forward)
           cross = data.buttons[0] # buttons[0]
           
           # this part of if block, will tell base motor to run at a certain speed

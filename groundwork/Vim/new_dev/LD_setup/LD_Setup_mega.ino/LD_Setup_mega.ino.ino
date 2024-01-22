@@ -9,9 +9,11 @@
 #define DIRAS 12//augur spin 
 #define PWMAS 1
 
+#define stepperenablepin 3
+
 std_msgs::Int16MultiArray msg;
 ros::NodeHandle nh;
-int msg_data[3] = {0,0,0};
+int msg_data[4] = {0,0,0,2};
 
 // std_msgs:: str_msg;
 std_msgs::Int16MultiArray msg2;
@@ -22,6 +24,7 @@ void messageCb( const std_msgs::Int16MultiArray& msg){
   msg_data[0] = msg.data[0];
   msg_data[1]= msg.data[1];
   msg_data[2] =msg.data[2];
+  msg_data[3] = msg.data[3]; // for stepper enable / disable //// 1 for enable 2 (& 0) for disable
 }
 
 void excecute_command(){
@@ -50,8 +53,17 @@ void excecute_command(){
   // else{
   //   analogWrite(PWMAS,0);//make sure everything is switched off 
   // }
+
+  if(msg_data[3] == 2){
+    digitalWrite(stepperenablepin, HIGH); // disabled
+
+  }
+  if(msg_data[3] == 1){
+    digitalWrite(stepperenablepin, LOW);
+
+  }
 }
-ros::Subscriber<std_msgs::Int16MultiArray> sub("/mega", &messageCb );
+ros::Subscriber<std_msgs::Int16MultiArray> sub("/ld_mega", &messageCb );
 void setup() {
   nh.initNode();
   nh.subscribe(sub);
@@ -68,6 +80,7 @@ void setup() {
   pinMode(DIR3,OUTPUT);
   pinMode(PWM3,OUTPUT);//motor used for mixing chamber.
 
+  pinMode(stepperenablepin, OUTPUT);
 }
 
 void loop() {

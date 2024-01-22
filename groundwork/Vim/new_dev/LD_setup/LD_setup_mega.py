@@ -13,13 +13,18 @@ class JoystickControl:
           self.auger_spinA = 0 # variable to control auger spin anti clockwise
           self.auger_spin = 0
           self.msg = Int16MultiArray()
+          self.stepper_status = 2  ## 0 / 2 for disable, 1 for enable
         
           self.sub = rospy.Subscriber("/joy", Joy, self.callback)
-          self.pub = rospy.Publisher("/mega", Int16MultiArray, queue_size=1)
+          self.pub = rospy.Publisher("/ld_mega", Int16MultiArray, queue_size=1)
         
      def callback(self, data):
           joy_pump2= data.axes[-1] #controls pumps
           joy_pump3=data.axes[-2]
+          
+          square = data.buttons[3] # enabling stepper
+          circle = data.buttons[1] # disableing stepper
+          
           self.auger_spin = 0
             
           xaxis=data.axes[0] #controls spin og augur
@@ -31,6 +36,11 @@ class JoystickControl:
             self.pump3=1
           else:
             self.pump3 = 0
+            
+          if(square==1):
+               self.stepper_status = 1
+          elif(circle==1):
+               self.stepper_status = 2
 
           
           # this part of if block, will tell if the gripper is performing roll or pitch motion, in which direction and what velocity
@@ -48,7 +58,7 @@ class JoystickControl:
                self.auger_spin = 0
 
           # self.msg.data = [self.pump2,self.pump3,self.auger_spinC,self.auger_spinA]
-          self.msg.data = [self.pump2,self.pump3,self.auger_spin]
+          self.msg.data = [self.pump2,self.pump3,self.auger_spin, self.stepper_status]
           self.pub.publish(self.msg)
 
 rospy.init_node("joy_control_mega", anonymous=True)

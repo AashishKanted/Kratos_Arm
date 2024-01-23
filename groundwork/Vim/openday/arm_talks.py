@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 
 import sys
@@ -38,7 +38,7 @@ import rospy
 from std_msgs.msg import Int8, Int16
 
 rospy.init_node('arm_gpt', anonymous=True)
-publisher1 = rospy.Publisher('/arm_gpt', Int8, queue_size=10)
+publisher1 = rospy.Publisher('/arm_gpt', Int8, queue_size=1)
 
 # Function that accepts audio by microphone and converts it into text
 def listen():
@@ -63,7 +63,7 @@ def listen():
         outputMessage = "Google Speech Recognition could not understand audio"
         error = 1
 
-    print(outputMessage)
+    # print(outputMessage)
     return outputMessage, error
 
 # Function that calls OpenAI service with a prompt and returns the response
@@ -168,7 +168,7 @@ def textToAudio(text):
 chat_history = []
 while True:
     inputMessage, error = listen()  # User audio input
-    print(inputMessage, error)
+    print(inputMessage)
 
     if error == 0:
         try:
@@ -181,6 +181,6 @@ while True:
         message = "I didn't understand"
         error = 0
 
-    print(message)
+    # print(message)
 
     textToAudio(message)  # Text -> Audio the response from OpenAI

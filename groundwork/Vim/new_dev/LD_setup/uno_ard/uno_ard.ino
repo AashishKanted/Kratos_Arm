@@ -2,12 +2,12 @@
 
 #include <ros.h>
 #include <std_msgs/Int16MultiArray.h>
-#define DIR1 5
-#define PWM1 10
-#define DIR_EL 7
-#define PWM_EL 6
+#define DIR1 7
+#define PWM1 6 // channel 6
+#define DIR_EL 5
+#define PWM_EL 10 //channel 3
 #define DIR_MIX 12
-#define PWM_MIX 9
+#define PWM_MIX 9 // channel 4
 
 
 const int dirPin = 4; // can be 4 and 3 as well
@@ -28,19 +28,19 @@ void messageCb( const std_msgs::Int16MultiArray& msg){
   }
   else if(msg.data[1]==1){
     digitalWrite(DIR_EL,HIGH);
-    analogWrite(PWM_EL,150);//bring the auger up/down
+    analogWrite(PWM_EL,150);//bring the auger up
   }
   else if(msg.data[2]==1){
     digitalWrite(DIR_EL,LOW);
-    analogWrite(PWM_EL,150);//bring auger down/up
+    analogWrite(PWM_EL,150);//bring auger down
   }
   else if(msg.data[3]==1){
     digitalWrite(DIR_MIX,HIGH);
-    analogWrite(PWM_MIX,150);//rotate mixing chamber clock
+    analogWrite(PWM_MIX,150);//rotate mixing chamber clockwise
   }
   else if(msg.data[4]==1){
     digitalWrite(DIR_MIX,LOW);
-    analogWrite(PWM_MIX,150);//rotate mixing chamber anti clock
+    analogWrite(PWM_MIX,150);//rotate mixing chamber anti clockwise
   }
   else{
     analogWrite(PWM1,0);

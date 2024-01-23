@@ -27,9 +27,9 @@ class JoystickControl:
           
           self.auger_spin = 0
             
-          xaxis=data.axes[0] #controls spin og augur
+          xaxis=data.axes[0] #controls spin of augur
           if(joy_pump2==-1):
-            self.pump2=1
+            self.pump2=1 
           else:
             self.pump2 = 0
           if(joy_pump3==1):
@@ -43,21 +43,13 @@ class JoystickControl:
                self.stepper_status = 2
 
           
-          # this part of if block, will tell if the gripper is performing roll or pitch motion, in which direction and what velocity
           if(xaxis>0):
-               # self.auger_spinC=1
-               # self.auger_spinA=0
                self.auger_spin = 1
           elif(xaxis<0):
-               # self.auger_spinA=1
-               # self.auger_spinC=0
                self.auger_spin = -1
           else:
-               # self.auger_spinA=0
-               # self.auger_spinC=0
                self.auger_spin = 0
-
-          # self.msg.data = [self.pump2,self.pump3,self.auger_spinC,self.auger_spinA]
+               
           self.msg.data = [self.pump2,self.pump3,self.auger_spin, self.stepper_status]
           self.pub.publish(self.msg)
 

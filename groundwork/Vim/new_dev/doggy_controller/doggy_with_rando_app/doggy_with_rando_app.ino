@@ -11,6 +11,8 @@
 
 #include <Cytron_SmartDriveDuo.h>
 
+int speed = 30;
+
 #define IN1 9
 #define BAUDRATE 115200
 Cytron_SmartDriveDuo smartDriveDuo30(SERIAL_SIMPLIFIED, IN1, BAUDRATE);
@@ -33,34 +35,40 @@ void loop() {
   // Continue with other tasks in your main loop
 }
 void executeCommand(char command) {
+    if(speed > 100)
+      speed = 100;
+    if(speed < 10)
+      speed = 10;
   switch (command) {
     case FORWARD:
-      right_wheel = 30;
-      left_wheel = 30;
+      right_wheel = speed;
+      left_wheel = speed;
       // Perform action for moving forward
       break;
     case BACKWARD:
-      right_wheel = -30;
-      left_wheel = -30;
+      right_wheel = -speed;
+      left_wheel = -speed;
       // Perform action for moving backward
       break;
     case LEFT:
-      right_wheel = -30; //JUGAD
-      left_wheel = 30;
+      right_wheel = -speed; //JUGAD
+      left_wheel = speed;
       // Perform action for turning left
       break;
     case RIGHT:
-    right_wheel = 30;
-      left_wheel = -30;
+    right_wheel = speed;
+      left_wheel = -speed;
       // Perform action for turning right
       break;
     case CIRCLE:
       // Perform action for circle
       break;
     case CROSS:
+      speed -= 10;
       // Perform action for immediate stop or crossing
       break;
     case TRIANGLE:
+      speed += 10;
       // Perform action for toggling a state (e.g., LED on/off)
       break;
     case SQUARE:

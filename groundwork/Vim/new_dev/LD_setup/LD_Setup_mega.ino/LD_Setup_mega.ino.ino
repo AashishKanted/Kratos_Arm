@@ -3,11 +3,11 @@
 #define DIR2 6//pump2
 #define PWM2 5
 
-#define DIR3 10//pump3
-#define PWM3 11
+#define DIR3 12//pump3
+#define PWM3 1
 
-#define DIRAS 12//augur spin 
-#define PWMAS 1
+#define DIRAS 10//augur spin 
+#define PWMAS 11
 
 #define stepperenablepin 3
 
@@ -34,7 +34,7 @@ void excecute_command(){
   else analogWrite(PWM2,0);
 
   if(msg_data[1]==1){
-    analogWrite(PWM3,150);//use peristaltic pump 1
+    analogWrite(PWM3,150);//use peristaltic pump 2
   }
   else analogWrite(PWM3,0);
 

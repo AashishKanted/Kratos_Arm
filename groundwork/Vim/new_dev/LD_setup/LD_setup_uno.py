@@ -28,13 +28,15 @@ class JoystickControl:
           triangle = data.buttons[2] # buttons[2] //controls Stepper (for forward)
           cross = data.buttons[0] # buttons[0]
           
-          # this part of if block, will tell base motor to run at a certain speed
+          # this part of if block, will run pump 1
           if(joy_pump1==1):
             self.pump1=1
           else:
             self.pump1 = 0
           
-          # this part of if block, will tell if the gripper is performing roll or pitch motion, in which direction and what velocity
+          # this part of if block, will control 2 bidirectional motors which are mixer and auger up and down
+          # x axis is for the mixer
+          # y axis is for auger up/down
           if yAxis1 > 0 and abs(yAxis1) > abs(xAxis1):
                self.auger_up = 1
           else:

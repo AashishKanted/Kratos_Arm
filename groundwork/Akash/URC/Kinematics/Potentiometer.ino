@@ -1,5 +1,4 @@
 #include <ros.h>
-#include <Servo.h>
 #include <geometry_msgs/Point.h>
 
 ros::NodeHandle nh;

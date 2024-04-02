@@ -24,19 +24,23 @@ void setup() {
     // Serial.println (counter);
   temp = counter;
   }
+  // msg.data = counter;
+  // pub.publish(&msg);
+  // temp = counter;
+  delay(100);
   nh.spinOnce();
   }
-  void ai0() {
+void ai0() {
   if(digitalRead(5)==LOW) {
   counter++;
   }else{
   counter--;
   }
-  }
-  void ai1() {
+}
+void ai1() {
   if(digitalRead(27)==LOW) {
   counter--;
   }else{
   counter++;
   }
-  }
+}

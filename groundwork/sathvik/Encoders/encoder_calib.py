@@ -11,8 +11,14 @@ prev_enc_2 = 0
 enc_1 = 0
 enc_2 = 0
 
-angle_factor = 1
-angle_1 = 0
+angle_factor = 360/800
+
+enc_ret_1 = 0
+enc_ret_2 = 0
+
+# fully dextended angles; constant
+ang_1_ret = 0
+ang_2_ret = 0
 
 def callback_1(data):
     # global enc_1
@@ -44,6 +50,8 @@ while status:
         rate.sleep()
     else:
         status = 0
+        enc_ret_1 = enc_1
+        enc_ret_2 = enc_2
         enc_arr = Int16MultiArray()
         enc_arr.data = [enc_1, 0]
         start_t = time.time()
@@ -52,8 +60,8 @@ while status:
             rate.sleep()
 
 while not rospy.is_shutdown():
-    angle_1 = enc_1*angle_factor
-    angle_2 = enc_2*angle_factor
+    angle_1 = ang_1_ret + (enc_1 - enc_ret_1)*angle_factor
+    angle_2 = ang_2_ret + (enc_2 - enc_ret_2)*angle_factor
     angle_pub.publish(Int16MultiArray(data=[angle_1, angle_2]))
 
 rospy.spin()

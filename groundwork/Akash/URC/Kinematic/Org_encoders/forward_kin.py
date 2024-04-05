@@ -9,8 +9,8 @@ l2 = float(409.149)
 
 def callback(msg):
     global angle_1,angle_2
-    angle_1 = msg[0]
-    angle_2 = msg[1]
+    angle_1 = msg.data[0]
+    angle_2 = msg.data[1]
     
     theta_1 = math.radians(theta_1)
     theta_2 = math.radians(angle_2-180+angle_1)

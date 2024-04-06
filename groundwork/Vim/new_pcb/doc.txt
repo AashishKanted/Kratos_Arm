@@ -1,0 +1,41 @@
+- ESP32
+- 8 Motors
+ 	= 4 motor drivers
+ 	- 8 pins
+ 	
+ - Stepper
+ 	= 3 Pins (2 PWM + 1 digital)
+	- 3 GND
+
+- 2x Servo control
+	- 2 PWM minimum
+	- 4 pwm if possible
+	
+
+- Encoding motor feedback
+	- 4 analog pins
+
+20 + 6 pins on esp dev board
+20 - (8 + 3 + 2 + 4) 
+20 - 17
+3
+
+
+Rev 2 
+====
+
+- ESP 32
+- 6 motors	
+	- 3 motor driver
+	- 12 pins
+- Stepper
+	3 pins (2 pwm + q digital)
+	3 gnd
+ - Servo control
+ 	2 - 4 pins
+ - Encoding motor
+ 	- 4 anlog pins
+ 	
+ 12 + 3 + 4 + 4
+ = 23
+ 

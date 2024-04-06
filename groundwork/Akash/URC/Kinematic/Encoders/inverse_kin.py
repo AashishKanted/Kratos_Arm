@@ -50,7 +50,7 @@ class InverseKinematicsSolver:
         beta = np.arctan2(l2 * np.sin(theta2), l1 + l2 * np.cos(theta2))
         theta1 = alpha - beta
 
-        theta2 = theta2 + np.pi  # Makes it easier to visualize
+        theta2 = np.pi - theta2  # Makes it easier to visualize
 
         return theta1, theta2
 
